@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j='http://jakarta.apache.org/log4j/'>
+
+	<appender name="dailyDebug" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="logs/timer/debug.log" />
+		<param name="DatePattern" value="'.'yyyy-MM-dd'.log'" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d [%c{2}] %m%n" />
+		</layout>
+	</appender>
+	
+	<appender name="dailySystemOut" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="logs/timer/system_out.log" />
+		<param name="DatePattern" value="'.'yyyy-MM-dd'.log'" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d [%c] %m%n" />
+		</layout>
+	</appender>
+
+	<appender name="dailyAllLog" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="logs/timer/all.log" />
+		<param name="DatePattern" value="'.'yyyy-MM-dd'.log'" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d [%c] %m%n" />
+		</layout>
+	</appender>
+
+
+	<appender name="asyncDailyDebug" class="org.apache.log4j.AsyncAppender">
+		<param name="BufferSize" value="0" />
+		<appender-ref ref="dailyDebug" />
+	</appender>
+
+	<appender name="asyncSystemOut" class="org.apache.log4j.AsyncAppender">
+		<param name="BufferSize" value="0" />
+		<appender-ref ref="dailySystemOut" />
+	</appender>
+
+	<appender name="asyncDailyAllLog" class="org.apache.log4j.AsyncAppender">
+		<param name="BufferSize" value="0" />
+		<appender-ref ref="dailyAllLog" />
+	</appender>
+
+	<logger name="com.mi360.aladdin.timer" additivity="false">
+		<level value="debug" />
+		<appender-ref ref="asyncDailyDebug" />
+	</logger>
+
+	<logger name="System.out" additivity="false">
+		<level value="debug" />
+		<appender-ref ref="asyncSystemOut" />
+	</logger>
+
+	<root>
+		<level value="debug" />
+		<appender-ref ref="asyncDailyAllLog" />
+	</root>
+
+</log4j:configuration>

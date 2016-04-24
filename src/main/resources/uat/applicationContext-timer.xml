@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+				        http://www.springframework.org/schema/beans/spring-beans.xsd
+				        http://code.alibabatech.com/schema/dubbo
+				        http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+				        http://www.springframework.org/schema/context 
+						http://www.springframework.org/schema/context/spring-context-3.0.xsd 
+						http://www.springframework.org/schema/mvc 
+						http://www.springframework.org/schema/mvc/spring-mvc.xsd
+						http://www.springframework.org/schema/aop
+						http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+						http://www.springframework.org/schema/tx
+						http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+				        http://www.springframework.org/schema/task 
+				        http://www.springframework.org/schema/task/spring-task-3.0.xsd"> 
+		
+	
+	<!-- 设置要扫描的包 -->	
+	<context:component-scan base-package="com.mi360.aladdin.timer.job"/>
+	
+	<task:annotation-driven scheduler="qbScheduler" mode="proxy"/>
+	<task:scheduler id="qbScheduler" pool-size="10"/>
+	
+	<import resource="classpath*:/dubbo-timer.xml"/>
+	
+    <!-- <bean id="CronTriggerBean" class="org.springframework.scheduling.quartz.CronTriggerBean">  
+		<property name="jobDetail" ref="SpringQtzJobMethod"></property>  
+		<property name="cronExpression" value="0/5 * * * * ?"></property>  
+	</bean>  
+	  
+	<bean id="SpringQtzJob" class="com.mi360.aladdin.timer.job.CheckOrderJob"/>  
+		<bean id="SpringQtzJobMethod" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+		<property name="targetObject">  
+			<ref bean="SpringQtzJob"/>  
+		</property>  
+		<property name="targetMethod">  要执行的方法名称  
+			<value>executeInternal</value>  
+		</property>  
+	</bean> 
+	
+	<bean id="SpringJobSchedulerFactoryBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">  
+		<property name="triggers">  
+			<list>  
+				<ref bean="CronTriggerBean"/>  
+			</list>  
+		</property>  
+	</bean> -->
+	
+	
+	
+						
+</beans>

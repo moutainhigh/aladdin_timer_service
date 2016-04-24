@@ -1,0 +1,197 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.mi360.aladdin</groupId>
+  <artifactId>timer</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>aladdin_timer_service</name>
+  <url>http://maven.apache.org</url>
+
+  <properties>
+       <spring.version>3.1.3.RELEASE</spring.version>
+   </properties>
+
+    <dependencies>
+    	
+    	
+    	<dependency>
+			<groupId>com.mi360.aladdin</groupId>
+			<artifactId>aladdin_base</artifactId>
+			<version>0.2.0-SNAPSHOT</version>
+			<exclusions>
+				<exclusion>
+					<groupId>*</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+    	
+    	<dependency>
+			<groupId>com.mi360.aladdin</groupId>
+			<artifactId>aladdin_mq_base</artifactId>
+			<version>0.1-SNAPSHOT</version>
+		</dependency>
+    	
+    	<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.10</version>
+			<scope>test</scope>
+		</dependency>
+    
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+<!--         <dependency> -->
+<!--             <groupId>org.quartz-scheduler</groupId> -->
+<!--             <artifactId>quartz</artifactId> -->
+<!--             <version>1.8.5</version> -->
+<!--         </dependency> -->
+        
+        <dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>dubbo</artifactId>
+			<version>2.8.4</version>
+		</dependency>
+		<!-- zkclient -->
+		<dependency>
+			<groupId>com.github.sgroschupf</groupId>
+			<artifactId>zkclient</artifactId>
+			<version>0.1</version>
+		</dependency>
+
+		<!-- zookeeper -->
+		<dependency>
+			<groupId>org.apache.zookeeper</groupId>
+			<artifactId>zookeeper</artifactId>
+			<version>3.3.6</version>
+		</dependency>
+        
+    </dependencies>
+
+    <build>
+    	<finalName>aladdin_timer_service</finalName>
+        <resources>
+			<resource>
+				<directory>src/main/java</directory>
+				<includes>
+					<include>**/*.properties</include>
+					<include>**/*.xml</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>src/main/resources/${config.dir}</directory>
+				<includes>
+					<include>**/*.properties</include>
+					<include>**/*.xml</include>
+				</includes>
+			</resource>
+		</resources>
+        
+        <plugins>
+            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <defaultLibBundleDir>lib</defaultLibBundleDir>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+            <plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy</id>
+						<phase>install</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>
+								${project.build.directory}/lib
+							</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>com.mi360.aladdin.timer.Start</mainClass>
+							<addClasspath>true</addClasspath>
+							<classpathPrefix>lib/</classpathPrefix>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+            
+        </plugins>
+        
+        
+        
+    </build>
+    
+    <profiles>
+		<profile>
+			<id>dev</id>
+			<properties>
+				<config.dir>dev</config.dir>
+			</properties>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+		</profile>
+		<profile>
+			<id>pro</id>
+			<properties>
+				<config.dir>pro</config.dir>
+			</properties>
+		</profile>
+		<profile>
+			<id>sit</id>
+			<properties>
+				<config.dir>sit</config.dir>
+			</properties>
+						
+		</profile>
+		<profile>
+			<id>uat</id>
+			<properties>
+				<config.dir>uat</config.dir>
+			</properties>
+
+		</profile>
+	</profiles>
+</project>
