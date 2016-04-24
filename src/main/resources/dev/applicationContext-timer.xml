@@ -24,7 +24,16 @@
 		
 	
 	<!-- 设置要扫描的包 -->	
-	<context:component-scan base-package="com.mi360.aladdin.timer.job"/>
+	<context:component-scan base-package="com.mi360.aladdin"/>
+	
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">  
+        <property name="locations">  
+           <list>  
+              <!-- 这里支持多种寻址方式：classpath和file -->  
+              <value>classpath*:/aladdin.properties</value>
+            </list> 
+        </property>  
+    </bean> 
 	
 	<task:annotation-driven scheduler="qbScheduler" mode="proxy"/>
 	<task:scheduler id="qbScheduler" pool-size="10"/>

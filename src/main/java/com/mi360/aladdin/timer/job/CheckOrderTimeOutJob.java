@@ -24,8 +24,8 @@ public class CheckOrderTimeOutJob {
 	@Autowired
 	private MqProducer mqProducer;
 	
-	@Scheduled(cron="0/15 * * * * ? ")
-	public void share(){
+	@Scheduled(cron="* 0/1 * * * ? ")
+	public void cancelPayTimeOutOrder(){
 		
 		String requestId = UUID.randomUUID().toString().replace("-", "");
 		
@@ -34,11 +34,6 @@ public class CheckOrderTimeOutJob {
 			Order order = orderList.get(i);
 			order.setOrderStatus("CAN");
 			orderService.updateOrder(order, requestId);
-			logger.info("发送消息队列");
-			System.out.println("自动取消订单");
-			//TODO 发送消息队列
-			
-			
 			
 		}
 		
@@ -46,13 +41,10 @@ public class CheckOrderTimeOutJob {
 	
 	/**
 	 * 	判断订单是否距离下单时间超过15天 每隔5分钟到数据库检车一次 
-	 * 	1 如果已发货 则自动改为 COM
-	 *  2 如果未发货 
-	 *  3 如果申请退款
-	 *  4 如果申请退货 	
+	 * 	1 如果已发货 则自动改为 COM 并且退款状态 不为 退款中或  申请退款  
 	 */
-	@Scheduled(cron="0/5 * * * * ? ")
-	public void printTime(){
+	@Scheduled(cron="* * 0/1 * * ? ")
+	public void autoCompleteOrder(){
 		
 		String requestId = UUID.randomUUID().toString().replace("-", "");
 		
@@ -60,9 +52,8 @@ public class CheckOrderTimeOutJob {
 		for(int i=0;i<orderList.size();i++){
 			orderList.get(i).setOrderStatus("COM");
 			orderService.updateOrder(orderList.get(i), requestId);
-			logger.info("发送消息队列");
-			System.out.println("自动完成订单");
-			//TODO 发送消息队列
+			
+			mqProducer.orderComplete(requestId, orderList.get(i).getOrderCode());
 		}
 		
 	}

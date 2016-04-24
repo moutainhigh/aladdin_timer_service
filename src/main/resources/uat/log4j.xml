@@ -26,7 +26,6 @@
 		</layout>
 	</appender>
 
-
 	<appender name="asyncDailyDebug" class="org.apache.log4j.AsyncAppender">
 		<param name="BufferSize" value="0" />
 		<appender-ref ref="dailyDebug" />
@@ -46,7 +45,7 @@
 		<level value="debug" />
 		<appender-ref ref="asyncDailyDebug" />
 	</logger>
-
+	
 	<logger name="System.out" additivity="false">
 		<level value="debug" />
 		<appender-ref ref="asyncSystemOut" />

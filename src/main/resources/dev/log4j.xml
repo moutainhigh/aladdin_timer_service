@@ -41,16 +41,7 @@
 		<appender-ref ref="dailyAllLog" />
 	</appender>
 
-	<logger name="com.mi360.aladdin.mapper.order" additivity="false">
-		<level value="debug" />
-		<appender-ref ref="asyncDailyDebug" />
-	</logger>
-
-	<logger name="com.mi360.aladdin.order.service" additivity="false">
-		<level value="debug" />
-		<appender-ref ref="asyncDailyDebug" />
-	</logger>
-	<logger name="com.mi360.aladdin.order.util" additivity="false">
+	<logger name="com.mi360.aladdin.timer" additivity="false">
 		<level value="debug" />
 		<appender-ref ref="asyncDailyDebug" />
 	</logger>
