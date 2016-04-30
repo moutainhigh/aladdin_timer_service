@@ -139,6 +139,7 @@
 							<mainClass>com.mi360.aladdin.timer.Start</mainClass>
 							<addClasspath>true</addClasspath>
 							<classpathPrefix>lib/</classpathPrefix>
+							<useUniqueVersions>false</useUniqueVersions>
 						</manifest>
 					</archive>
 				</configuration>
@@ -156,9 +157,7 @@
 			<properties>
 				<config.dir>dev</config.dir>
 			</properties>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
+			
 		</profile>
 		<profile>
 			<id>pro</id>
@@ -167,11 +166,13 @@
 			</properties>
 		</profile>
 		<profile>
-			<id>sit</id>
+			<id>test</id>
 			<properties>
-				<config.dir>sit</config.dir>
+				<config.dir>test</config.dir>
 			</properties>
-						
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
 		</profile>
 		<profile>
 			<id>uat</id>

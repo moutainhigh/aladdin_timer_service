@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import com.mi360.aladdin.entity.order.GoodsReturn;
 import com.mi360.aladdin.entity.order.Order;
 import com.mi360.aladdin.mq.base.producer.MqProducer;
 import com.mi360.aladdin.order.service.IOrderService;
@@ -50,10 +51,19 @@ public class CheckOrderTimeOutJob {
 		
 		List<Order> orderList = orderService.selectOvertimeOrder(requestId);
 		for(int i=0;i<orderList.size();i++){
-			orderList.get(i).setOrderStatus("COM");
-			orderService.updateOrder(orderList.get(i), requestId);
 			
-			mqProducer.orderComplete(requestId, orderList.get(i).getOrderCode());
+			//拿到的子订单 是 未申请退款的或退款失败的  或  退款审核被拒绝的  现在要 判断是否有退货的
+			Long count = orderService.selectCanNotCompleteReturnGoodsCount(requestId, orderList.get(i).getID());
+			
+			if(count>0){//已退货  或  退货中
+				
+			}else{
+				orderList.get(i).setOrderStatus("COM");
+				orderService.updateOrder(orderList.get(i), requestId);
+				mqProducer.orderComplete(requestId, orderList.get(i).getOrderCode());
+				
+			}
+			
 		}
 		
 	}
