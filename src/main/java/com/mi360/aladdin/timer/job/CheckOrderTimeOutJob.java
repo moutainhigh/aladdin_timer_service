@@ -26,9 +26,6 @@ public class CheckOrderTimeOutJob {
 	@Autowired
 	private MqProducer mqProducer;
 	
-	@Autowired
-	private OrderMapper orderMapper;
-	
 	@Scheduled(cron="* 0/1 * * * ? ")
 	public void cancelPayTimeOutOrder(){
 		
@@ -79,7 +76,7 @@ public class CheckOrderTimeOutJob {
 			
 			orderList.get(i).setOrderStatus("COM");
 			logger.info("订单 "+orderList.get(i).getOrderCode()+" 已完成");
-			orderMapper.updateByPrimaryKeySelective(orderList.get(i));
+			orderService.updateOrder(orderList.get(i), requestId);
 			mqProducer.orderComplete(requestId, orderList.get(i).getOrderCode());
 			
 			
