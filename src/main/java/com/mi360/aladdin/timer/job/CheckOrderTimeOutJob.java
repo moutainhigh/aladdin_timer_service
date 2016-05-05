@@ -26,7 +26,8 @@ public class CheckOrderTimeOutJob {
 	@Autowired
 	private MqProducer mqProducer;
 	
-	@Scheduled(cron="* 0/1 * * * ? ")
+	
+	@Scheduled(cron="0/10 * * * * ? ")
 	public void cancelPayTimeOutOrder(){
 		
 		String requestId = UUID.randomUUID().toString().replace("-", "");
@@ -45,7 +46,7 @@ public class CheckOrderTimeOutJob {
 	 * 	判断订单是否距离下单时间超过15天 每隔5分钟到数据库检车一次 
 	 * 	1 如果已发货 则自动改为 COM 并且退款状态 不为 退款中或  申请退款  
 	 */
-	@Scheduled(cron="* 0/5 * * * ? ")
+	@Scheduled(cron="0/5 * * * * ? ")
 	public void autoCompleteOrder(){
 		
 		String requestId = UUID.randomUUID().toString().replace("-", "");
@@ -68,6 +69,15 @@ public class CheckOrderTimeOutJob {
 		}*/
 		
 		
+		//TODO 判断退货的问题  如果该子订单 有订单商品 处于 以下5种 状态 则不能已完成
+			/* 1 申请退货
+			 * 2 退货审核通过
+			 * 3 
+			 * 4 退货中
+			 * 5 待退款
+			 * 6 退款中 
+			 */
+		
 		List<Order> orderList = orderService.selectOvertimeOrder(requestId);
 		for(int i=0;i<orderList.size();i++){
 			
@@ -75,11 +85,10 @@ public class CheckOrderTimeOutJob {
 			//Long count = orderService.selectCanNotCompleteReturnGoodsCount(requestId, orderList.get(i).getID());
 			
 			orderList.get(i).setOrderStatus("COM");
+			orderList.get(i).setConfirmTime(new Date(orderList.get(i).getCreateTime().getTime()+ 15 * 24 * 60 * 60 * 1000));
 			logger.info("订单 "+orderList.get(i).getOrderCode()+" 已完成");
 			orderService.updateOrder(orderList.get(i), requestId);
-			mqProducer.orderComplete(requestId, orderList.get(i).getOrderCode());
-			
-			
+			mqProducer.orderComplete(requestId, orderList.get(i).getOrderCode(), orderList.get(i).getConfirmTime().getTime());
 			
 			
 		}
