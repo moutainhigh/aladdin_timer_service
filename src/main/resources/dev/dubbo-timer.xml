@@ -15,6 +15,7 @@
 
 	<dubbo:reference id="orderService" interface="com.mi360.aladdin.order.service.IOrderService"/>
 	
+	<dubbo:reference id="mqService" interface="com.mi360.aladdin.mq.service.MqService"/>
 		
 </beans>	
 	
