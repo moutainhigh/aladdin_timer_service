@@ -1,9 +1,13 @@
 package com.mi360.aladdin.timer;
 
 import java.io.PrintStream;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import com.mi360.aladdin.entity.order.Order;
+import com.mi360.aladdin.order.service.IOrderService;
 
 public class Start {
 	
@@ -12,8 +16,11 @@ public class Start {
 	public static void main(String[] args) throws Exception{
 		
 		initialize();
-		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(new String[] { "applicationContext-timer.xml" , "classpath*:/applicationContext.xml" });
+		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(new String[] { "applicationContext-timer.xml" });
 		context.start();
+		IOrderService orderService = context.getBean(IOrderService.class);
+		List<Order> orderList = orderService.selectOvertimeOrder("abc");
+		System.out.println("orderList:"+orderList);
 		System.out.println("定时器微服务启动");
 		while(true){
 			Thread.sleep(1000);

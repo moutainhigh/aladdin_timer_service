@@ -11,6 +11,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.mi360.aladdin.entity.order.Order;
+import com.mi360.aladdin.entity.order.OrderCashback;
 import com.mi360.aladdin.mq.service.MqService;
 import com.mi360.aladdin.order.service.IOrderService;
 
@@ -86,9 +87,19 @@ public class CheckOrderTimeOutJob {
 				
 			}else{
 				orderList.get(i).setOrderStatus("COM");
-				orderList.get(i).setConfirmTime(new Date(orderList.get(i).getCreateTime().getTime()+ 15 * 24 * 60 * 60 * 1000));
+				orderList.get(i).setConfirmTime(new Date());
 				logger.info("订单 "+orderList.get(i).getOrderCode()+" 已完成");
 				orderService.updateOrder(orderList.get(i), requestId);
+				// 查询对应的 orderCashBack
+				logger.info("查询对应的orderCashback");
+				OrderCashback orderCashback = orderService.getOrderCashbackByOrderCode(requestId, orderList.get(i).getOrderCode());
+				logger.info("orderCashback:"+orderCashback);
+				if(orderCashback!=null){
+					orderCashback.setCompleteTime(new Date());
+					orderCashback.setStatus(OrderCashback.Status.com.getCode());
+					orderService.updateOrderCashback(requestId, orderCashback);
+				}
+				
 				mqService.orderComplete(requestId, orderList.get(i).getOrderCode(), orderList.get(i).getConfirmTime().getTime());
 			}
 			
