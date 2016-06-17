@@ -164,5 +164,11 @@
 			</properties>
 
 		</profile>
+		<profile>
+			<id>pro2</id>
+			<properties>
+				<config.dir>pro2</config.dir>
+			</properties>
+		</profile>
 	</profiles>
 </project>
