@@ -16,7 +16,7 @@ public class Start {
 	public static void main(String[] args) throws Exception{
 		
 		initialize();
-		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(new String[] { "applicationContext-timer.xml" });
+		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(new String[] { "applicationContext.xml" });
 		context.start();
 		IOrderService orderService = context.getBean(IOrderService.class);
 		List<Order> orderList = orderService.selectOvertimeOrder("abc");

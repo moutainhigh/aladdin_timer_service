@@ -26,7 +26,6 @@ public class CheckOrderTimeOutJob {
 	@Autowired
 	private MqService mqService;
 	
-	
 	@Scheduled(cron="0 0/1 * * * ? ")
 	public void cancelPayTimeOutOrder(){
 		
